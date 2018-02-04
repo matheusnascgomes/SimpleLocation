@@ -8,22 +8,32 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  Text
+  Text,
+  AsyncStorage
 } from 'react-native';
 
 
 export default class App extends Component<{}> {
 
   state = {
-    latitude: 0,
-    longitude: 0
+    startLatitude: 0,
+    startLongitude: 0,
+    currentLatitude: 0,
+    currentLongitude: 0
   }
 
   componentDidMount() {
+    navigator.geolocation.getCurrentPosition(position => {
+      this.setState({
+        startLatitude: position.coords.latitude,
+        startLongitude: position.coords.longitude
+      });
+    });
+
     navigator.geolocation.watchPosition(position => {
       this.setState({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
+        currentLatitude: position.coords.latitude,
+        currentLongitude: position.coords.longitude
       });
     });
   }
@@ -31,8 +41,11 @@ export default class App extends Component<{}> {
   render() {
     return (
     <View style={styles.container}>
-      <Text style={styles.text}>Latitude atual: {this.state.latitude}</Text>
-      <Text style={styles.text}>Longitude atual: {this.state.longitude}</Text>
+      <Text style={styles.text}>Latitude Casa: {this.state.startLatitude}</Text>
+      <Text style={styles.text}>Longitude Casa: {this.state.startLongitude}</Text>
+
+      <Text style={styles.text}>Latitude Atual: {this.state.currentLatitude}</Text>
+      <Text style={styles.text}>Longitude Atual: {this.state.currentLongitude}</Text>
     </View>
     );
   }
