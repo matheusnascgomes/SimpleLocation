@@ -1,0 +1,3 @@
+rootProject.name = 'hard_features'
+
+include ':app'
